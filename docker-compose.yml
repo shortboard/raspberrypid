@@ -1,8 +1,13 @@
 version: '2'
+volumes:
+    pid-configuration:
 
 services:
-    # TODO: This is an insecure version due which was carried over from the MVP
-    # This should be replaced ASAP, with the correct security settings.
-    temperature-logger:
-        build: ./temperature-logger
+    #temperature-logger:
+    #    build: ./temperature-logger
+    #    privileged: true
+    pid:
+        build: ./pid
         privileged: true
+        volumes:
+            - 'pid-configuration:/config'
