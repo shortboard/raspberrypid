@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+    # TODO: This is an insecure version due which was carried over from the MVP
+    # This should be replaced ASAP, with the correct security settings.
+    temperature-logger:
+        build: ./temperature-logger
+        privileged: true
