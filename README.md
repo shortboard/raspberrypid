@@ -3,10 +3,10 @@ Modification i'm making for my Rancillio Silvia coffee machine due to killing on
 
 This is built using whatever tech i need (currently python) and contained in docker containers that i'm deploying to the Pi using Balena (though it should work fine in any distro with a docker host). 
 
-# Future Features
+## Future features
 - Auto sleep (incase i leave the coffee machine on too long again)
 - Scheduler / Remote wakeup
 - Web portal configuration (though i might host that on azure in docker containers)
 
-# Pi in the sky features
+## Pi in the sky features
 - Shot timer (will need to change the hardware setup so this probably wont happen)
