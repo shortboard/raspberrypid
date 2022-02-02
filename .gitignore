@@ -128,3 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 /.vs
+/configuration/ConfigurationAPI/.vs/ConfigurationAPI/v17
+/configuration/ConfigurationAPI/ConfigurationAPI/bin/Debug/net6.0
+/configuration/ConfigurationAPI/ConfigurationAPI/obj
+/configuration/ConfigurationAPI/ConfigurationAPI/Properties

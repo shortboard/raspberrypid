@@ -31,10 +31,6 @@ brewPID = PID.PID(P, I, D)
 brewPID.SetPoint = brewTargetT
 brewPID.setSampleTime(cycleSeconds)
 
-steamPID = PID.PID(P, I, D)
-steamPID.SetPoint = steamTargetT
-steamPID.setSampleTime(cycleSeconds)
-
 def readConfig():
     global brewTargetT
     global steamTargetT
@@ -46,16 +42,8 @@ def readConfig():
         brewPID.setKp (float(config[2]))
         brewPID.setKi (float(config[3]))
         brewPID.setKd (float(config[4]))
-
-        steamPID.SetPoint = float(config[1])
-        steamTargetT = steamPID.SetPoint
-        steamPID.setKp (float(config[2]))
-        steamPID.setKi (float(config[3]))
-        steamPID.setKd (float(config[4]))
-
         cycleSeconds = (int(config[5]))
         brewPID.setSampleTime(cycleSeconds)
-        steamPID.setSampleTime(cycleSeconds)
 
 def createConfig():
 #	if not os.path.isfile('/config/pid.conf'):
@@ -74,42 +62,17 @@ while True:
     brewTargetPwm = brewPID.output
     brewTargetPwm = max(min(int(brewTargetPwm), 100), 0)
 
-    steamPID.update(tempC)
-    steamTargetPwm = steamPID.output
-    steamTargetPwm = max(min(int(steamTargetPwm), 100), 0)
+    steamTargetPwm = 0
 
     print("Current: {} C | Brew Target: {} C | Steam Target: {} C | Brew PWM: {} | Steam PWM: {}".format(tempC, brewTargetT, steamTargetT, brewTargetPwm, steamTargetPwm))
 
     brewOnTime = (brewTargetPwm / 100.0) * cycleSeconds
-    steamOnTime = (steamTargetPwm / 100.0) * cycleSeconds
 
     if brewOnTime != 0:
         print("Turn brew on for {} seconds".format(brewOnTime))
         brewRelay.on()
-    if steamOnTime != 0:
-        print("Turn steam on for {} seconds".format(brewOnTime))
-        steamRelay.on()
 
-    if (steamOnTime > brewOnTime):
-        time.sleep(brewOnTime)
-        if brewTargetPwm != 100:
-            print("Turn off for {} seconds".format(steamOnTime - brewOnTime))
-            brewRelay.off()
-            if (steamOnTime - brewOnTime > 0):
-                time.sleep(steamOnTime - brewOnTime)
-        if steamTargetPwm != 100:
-            print("Turn off for {} seconds".format(cycleSeconds - steamOnTime))
-            steamRelay.off()
-            time.sleep(cycleSeconds - steamOnTime)
-    
-    if (brewOnTime > steamOnTime):
-        time.sleep(steamOnTime)
-        if steamTargetPwm != 100:
-            print("Turn off for {} seconds".format(brewOnTime - steamOnTime))
-            steamRelay.off()
-            if (brewOnTime - steamOnTime > 0):
-                time.sleep(brewOnTime - steamOnTime)
-        if brewTargetPwm != 100:
-            print("Turn off for {} seconds".format(cycleSeconds - brewOnTime))
-            brewRelay.off()
-            time.sleep(cycleSeconds - brewOnTime)
+    if brewOnTime != 100:
+        print("Turn brew on for {} seconds".format(brewOnTime))
+        brewRelay.on()
+
