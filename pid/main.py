@@ -27,15 +27,10 @@ P = 3.4
 I = 0.3
 D = 40.0
 cycleSeconds = 1
-
 brewPID = PID.PID(P, I, D)
-brewPID.SetPoint = brewTargetT
-brewPID.setSampleTime(cycleSeconds)
-
 steamPID = PID.PID(P, I, D)
-steamPID.SetPoint = steamTargetT
-steamPID.setSampleTime(cycleSeconds)
 
+# Creates a default config file if one does not exist yet
 def createConfig():
     if not os.path.isfile('/config/pid.config.json'):
         config = {
@@ -49,23 +44,24 @@ def createConfig():
         with open ('/config/pid.config.json', 'w') as f:
             json.dump(config, f)
 
+# reads the values from the config (does this every cycle to pick up on any config changes, though im considering reducing the reads and just updating every 30 seconds or so)
 def readConfig():
     global brewTargetT
     global steamTargetT
     global cycleSeconds
     with open ('/config/pid.config.json', 'r') as f:
         config = json.load(f)
-        brewPID.SetPoint = float(config["brew_target_temp"])
+        brewPID.SetPoint = min(float(config["brew_target_temp"]), 110.0)
         brewTargetT = brewPID.SetPoint
-        brewPID.setKp (float(config["P"]))
-        brewPID.setKi (float(config["I"]))
-        brewPID.setKd (float(config["D"]))
+        brewPID.setKp(float(config["P"]))
+        brewPID.setKi(float(config["I"]))
+        brewPID.setKd(float(config["D"]))
 
-        steamPID.SetPoint = float(config["steam_target_temp"])
+        steamPID.SetPoint = min(float(config["steam_target_temp"]), 130.0)
         steamTargetT = steamPID.SetPoint
-        steamPID.setKp (float(config["P"]))
-        steamPID.setKi (float(config["I"]))
-        steamPID.setKd (float(config["D"]))
+        steamPID.setKp(float(config["P"]))
+        steamPID.setKi(float(config["I"]))
+        steamPID.setKd(float(config["D"]))
 
         cycleSeconds = (int(config["cycle_seconds"]))
         brewPID.setSampleTime(cycleSeconds)
@@ -79,9 +75,9 @@ while True:
     #Get temp
     try:
         tempC = max31855.temperature
-    except RuntimeError:
+    except RuntimeError: # I have a issue with my thermocouple shorting to ground periodically (likely because i fried the sheath with 240v, be very careful in your coffee machine)
         print("Runtime Error")
-    else: # Only update values if we got a new reading, otherwise continue with current settings
+    else: # Discard values unless we got a new reading. This means the element will be pulsed as the same rate as last cycle.
         brewPID.update(tempC)
         brewTargetPwm = brewPID.output
         brewTargetPwm = max(min(int(brewTargetPwm), 100), 0)
@@ -90,8 +86,12 @@ while True:
         steamTargetPwm = steamPID.output
         steamTargetPwm = max(min(int(steamTargetPwm), 100), 0)
 
+        # Store to redis here
+
     print("Current: {} C | Brew Target: {} C | Steam Target: {} C | Brew PWM: {} | Steam PWM: {}".format(tempC, brewTargetT, steamTargetT, brewTargetPwm, steamTargetPwm))
 
+    # The rest of the logic is to pules the element on and off according to the Pwm values. I only pulse once per cycle incase it effects the longevity of the element.
+    # This is also why you should use a solid state relay as a mechanical will fail reasonably quickly doing this many cycles (along with being incredibly noisy).
     brewOnTime = (brewTargetPwm / 100.0) * cycleSeconds
     steamOnTime = (steamTargetPwm / 100.0) * cycleSeconds
 
