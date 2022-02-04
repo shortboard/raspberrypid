@@ -15,6 +15,7 @@ This is built using whatever tech i need (currently python, but will probably in
 
 ## Future features
 - Configuration API
+- Redis temperature history
 - Auto sleep (incase i leave the coffee machine on too long again)
 - Scheduler / Remote wakeup
 - Web portal configuration (though i might host that on azure in docker containers)
