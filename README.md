@@ -1,7 +1,10 @@
 # RaspberryPID
-Modification i'm making for my Rancillio Silvia coffee machine due to killing one of the thermostats by leaving it on for an extended period of time. It uses a RPi Zero W 2, a K type thermocouple with a MAX31855K thermocouple interface and a couple of relays to get more accurate and stable temparatures while brewing.
+*Ever wanted to turn your coffee machine into a docker host?*
 
-This is built using whatever tech i need (currently python, but will probably include some c#/.Net) and contained in docker containers that i'm deploying to the Pi using Balena (though it should work fine in any distro with a docker host). 
+This is a quick collection of docker containers i've put together to get a PID running on my Rancilio Silvia. It's currently able to control both steam and brew temperature. The wiring is pretty simple so i haven't drawn it up yet but the basic premise is:
+
+Thermocouple --> Pi Zero W 2 --> 2 Relays (Controlling from where the existing thermostats connected to the circuit.)
+           via SPI0     via GPIO 23/24
 
 # Current Features
 - Brew temperature control
@@ -15,10 +18,11 @@ This is built using whatever tech i need (currently python, but will probably in
 
 ## Future features
 - Configuration API
-- Redis temperature history
+- Redis temperature history (Redis has a cool timeseries mode that would be good for this, not built for ARM so i'll have to build it myself)
 - Auto sleep (incase i leave the coffee machine on too long again)
 - Scheduler / Remote wakeup
 - Web portal configuration (though i might host that on azure in docker containers)
 
 ## Pi in the sky features
 - Shot timer (will need to change the hardware setup so this probably wont happen)
+- Pre-infusion (wonder if i can achieve this by just opening the brew valve without the pump?)
