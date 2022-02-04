@@ -3,8 +3,8 @@
 
 This is a quick collection of docker containers i've put together to get a PID running on my Rancilio Silvia. It's currently able to control both steam and brew temperature. The wiring is pretty simple so i haven't drawn it up yet but the basic premise is:
 
-Thermocouple --> Pi Zero W 2 --> 2 Relays (Controlling from where the existing thermostats connected to the circuit.)
-           via SPI0     via GPIO 23/24
+Thermocouple --via SPI0--> Pi Zero W 2 --via GPIO 23/24--> 2 Relays (Switching where the existing thermostats were connected to the circuit.)
+               
 
 # Current Features
 - Brew temperature control
