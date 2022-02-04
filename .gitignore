@@ -132,3 +132,5 @@ dmypy.json
 /configuration/ConfigurationAPI/ConfigurationAPI/bin/Debug/net6.0
 /configuration/ConfigurationAPI/ConfigurationAPI/obj
 /configuration/ConfigurationAPI/ConfigurationAPI/Properties
+/configuration-api/ConfigurationAPI/.vs/ConfigurationAPI/v17
+/configuration-api/ConfigurationAPI/.vs/ConfigurationAPI/config

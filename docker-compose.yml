@@ -3,9 +3,6 @@ volumes:
     pid-configuration:
 
 services:
-    #temperature-logger:
-    #    build: ./temperature-logger
-    #    privileged: true
     pid:
         build: ./pid
         privileged: true
@@ -15,3 +12,10 @@ services:
         image: redislabs/redistimeseries
         ports:
             - 6379:6379
+    api:
+        build: ./configuration-api/ConfigurationAPI
+        volumes:
+            - 'pid-configuration:/config'
+        ports:
+            - 80:80
+            - 443:443

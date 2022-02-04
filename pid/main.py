@@ -36,9 +36,9 @@ def createConfig():
         config = {
             "brew_target_temp": brewTargetT,
             "steam_target_temp": steamTargetT,
-            "P": P,
-            "I": I,
-            "D": D,
+            "p": P,
+            "i": I,
+            "d": D,
             "cycle_seconds": cycleSeconds
         }
         with open ('/config/pid.config.json', 'w') as f:
@@ -53,15 +53,15 @@ def readConfig():
         config = json.load(f)
         brewPID.SetPoint = min(float(config["brew_target_temp"]), 110.0)
         brewTargetT = brewPID.SetPoint
-        brewPID.setKp(float(config["P"]))
-        brewPID.setKi(float(config["I"]))
-        brewPID.setKd(float(config["D"]))
+        brewPID.setKp(float(config["p"]))
+        brewPID.setKi(float(config["i"]))
+        brewPID.setKd(float(config["d"]))
 
         steamPID.SetPoint = min(float(config["steam_target_temp"]), 130.0)
         steamTargetT = steamPID.SetPoint
-        steamPID.setKp(float(config["P"]))
-        steamPID.setKi(float(config["I"]))
-        steamPID.setKd(float(config["D"]))
+        steamPID.setKp(float(config["p"]))
+        steamPID.setKi(float(config["i"]))
+        steamPID.setKd(float(config["d"]))
 
         cycleSeconds = (int(config["cycle_seconds"]))
         brewPID.setSampleTime(cycleSeconds)
