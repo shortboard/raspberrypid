@@ -1,7 +1,0 @@
-FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3-build
-
-RUN pip3 install flask
-
-COPY main.py /usr/src/app/main.py
-
-CMD ["python3","/usr/src/app/main.py"]

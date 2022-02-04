@@ -8,6 +8,7 @@ import digitalio
 import adafruit_max31855
 import gpiozero
 import PID
+import json
 
 # Setup Connection
 print(dir(board))
@@ -35,32 +36,40 @@ steamPID = PID.PID(P, I, D)
 steamPID.SetPoint = steamTargetT
 steamPID.setSampleTime(cycleSeconds)
 
+def createConfig():
+    if not os.path.isfile('/config/pid.config.json'):
+        config = {
+            "brew_target_temp": brewTargetT,
+            "steam_target_temp": steamTargetT,
+            "P": P,
+            "I": I,
+            "D": D,
+            "cycle_seconds": cycleSeconds
+        }
+        with open ('/config/pid.config.json', 'w') as f:
+            json.dump(config, f)
+
 def readConfig():
     global brewTargetT
     global steamTargetT
     global cycleSeconds
-    with open ('/config/pid.conf', 'r') as f:
-        config = f.readline().split(',')
-        brewPID.SetPoint = float(config[0])
+    with open ('/config/pid.config.json', 'r') as f:
+        config = json.load(f)
+        brewPID.SetPoint = float(config["brew_target_temp"])
         brewTargetT = brewPID.SetPoint
-        brewPID.setKp (float(config[2]))
-        brewPID.setKi (float(config[3]))
-        brewPID.setKd (float(config[4]))
+        brewPID.setKp (float(config["P"]))
+        brewPID.setKi (float(config["I"]))
+        brewPID.setKd (float(config["D"]))
 
-        steamPID.SetPoint = float(config[1])
+        steamPID.SetPoint = float(config["steam_target_temp"])
         steamTargetT = steamPID.SetPoint
-        steamPID.setKp (float(config[2]))
-        steamPID.setKi (float(config[3]))
-        steamPID.setKd (float(config[4]))
+        steamPID.setKp (float(config["P"]))
+        steamPID.setKi (float(config["I"]))
+        steamPID.setKd (float(config["D"]))
 
-        cycleSeconds = (int(config[5]))
+        cycleSeconds = (int(config["cycle_seconds"]))
         brewPID.setSampleTime(cycleSeconds)
         steamPID.setSampleTime(cycleSeconds)
-
-def createConfig():
-	if not os.path.isfile('/config/pid.conf'):
-		with open ('/config/pid.conf', 'w') as f:
-			f.write('%s,%s,%s,%s,%s,%s'%(brewTargetT,steamTargetT,P,I,D,cycleSeconds))
 
 createConfig()
 
