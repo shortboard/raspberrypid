@@ -11,9 +11,7 @@ services:
         privileged: true
         volumes:
             - 'pid-configuration:/config'
-    configuration-api:
-        build: ./configuration-api
+    redis:
+        image: redislabs/redistimeseries
         ports:
-            - 80:80
-        volumes:
-            - 'pid-configuration:/config'
+            - 6379:6379
