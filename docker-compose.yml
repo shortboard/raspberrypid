@@ -8,14 +8,17 @@ services:
         privileged: true
         volumes:
             - 'pid-configuration:/config'
-    redis:
-        image: redislabs/redistimeseries
-        ports:
-            - 6379:6379
+    #redis:
+    #    image: redislabs/redistimeseries
+    #    ports:
+    #        - 6379:6379
     api:
         build: ./configuration-api/ConfigurationAPI
+        environment:
+            - 'ASPNETCORE_URLS:http://+:80'
         volumes:
             - 'pid-configuration:/config'
+        network_mode: "host"
         ports:
             - 80:80
             - 443:443

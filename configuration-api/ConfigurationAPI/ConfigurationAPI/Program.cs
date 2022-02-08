@@ -9,10 +9,10 @@ const string configPath = "/config/pid.config.json";
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-app.Urls.Add("http://0.0.0.0:80");
-app.Urls.Add("http://0.0.0.0:443");
-
 var app = builder.Build();
+
+//app.Urls.Add("http://localhost:3000");
+//app.Urls.Add("http://0.0.0.0:443");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
