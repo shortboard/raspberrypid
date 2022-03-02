@@ -8,27 +8,10 @@ services:
         privileged: true
         volumes:
             - 'pid-configuration:/config'
-    #redis:
-    #    image: redislabs/redistimeseries
-    #    ports:
-    #        - 6379:6379
     api:
-        build: ./configuration-api/ConfigurationAPI
-        environment:
-            ASPNETCORE_URLS: 'http://+:80'
-        volumes:
-            - 'pid-configuration:/config'
+        build: ./api
         privileged: true
         ports:
-            - 80:80
-            - 443:443
-    redisedge:
-        image: redisedge
-        build: ./redis-edge
-        ports:
-            - 6379:6379
-    azure-iot-hub:
-        build: balena-azure-iot-hub
-        environment:
-            AZ_CONN_STR: 'HostName=RasberryPIDIoTHub.azure-devices.net;DeviceId=RancilioSilvia;SharedAccessKey=RNE7KpprbVW2khattdznGSXGtdGwFiDZfnqVZu+obWI='
-            AZ_USE_RANDOM: 'true'
+            - 80:9000
+        volumes:
+            - 'pid-configuration:/config'
