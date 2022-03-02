@@ -57,7 +57,7 @@ def readConfig():
         brewPID.setKi(float(config["i"]))
         brewPID.setKd(float(config["d"]))
 
-        steamPID.SetPoint = min(float(config["steam_target_temp"]), 130.0)
+        steamPID.SetPoint = min(float(config["steam_target_temp"]), 140.0)
         steamTargetT = steamPID.SetPoint
         steamPID.setKp(float(config["p"]))
         steamPID.setKi(float(config["i"]))
