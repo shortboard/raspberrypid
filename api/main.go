@@ -83,8 +83,9 @@ func postSettings(w http.ResponseWriter, r *http.Request) {
 func handleRequests() {
 	router := mux.NewRouter().StrictSlash(true)
 	credentials := handlers.AllowCredentials()
-	methods := handlers.AllowedMethods([]string{"POST", "GET"})
+	methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 	origins := handlers.AllowedOrigins([]string{"*"})
+
 
 	router.HandleFunc("/", homePage)
 	router.HandleFunc("/settings", getSettings).Methods("GET")
