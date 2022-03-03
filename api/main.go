@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
