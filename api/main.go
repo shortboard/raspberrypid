@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
@@ -67,6 +68,17 @@ func getSettings(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode((settings))
 }
 
+func getTemps(w http.ResponseWriter, r *http.Request) string {
+	jsonFile, err := os.ReadFile(string(filepath.Separator) + "log" + string(filepath.Separator) + "temperature.json")
+
+	if err != nil {
+		fmt.Println(err)
+		return err.Error()
+	}
+
+	return string(jsonFile)
+}
+
 func postSettings(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 
@@ -80,20 +92,20 @@ func postSettings(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequests() {
-	router := mux.NewRouter().StrictSlash(true)
-	credentials := handlers.AllowCredentials()
+	router := mux.NewRouter()
+	//credentials := handlers.AllowCredentials()
 	methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 	origins := handlers.AllowedOrigins([]string{"*"})
-
+	headers := handlers.AllowedHeaders([]string{"*"})
 
 	router.HandleFunc("/", homePage)
 	router.HandleFunc("/settings", getSettings).Methods("GET")
 	router.HandleFunc("/settings", postSettings).Methods("POST")
 
-	log.Fatal(http.ListenAndServe(":9000", handlers.CORS(credentials, methods, origins)(router)))
+	log.Fatal(http.ListenAndServe(":9000", handlers.CORS(origins, headers, methods)(router)))
 }
 
 func main() {
-	fmt.Println("RasberryPID starting on port 80")
+	fmt.Println("RasberryPID starting on port 9000")
 	handleRequests()
 }

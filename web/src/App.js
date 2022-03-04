@@ -1,9 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
 import Settings from './components/Settings'
+import TempGraph from './components/TempGraph'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React from 'react';
-import { CssBaseline } from '@mui/material';
+import { Container, CssBaseline, Stack } from '@mui/material';
 
 const darkTheme = createTheme({
   palette: {
@@ -17,7 +17,13 @@ function App() {
       
       <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-        <Settings />
+
+        <Stack spacing={2}>
+          <Settings />
+          <TempGraph />
+        </Stack>
+
+        
       </ThemeProvider>
     </React.Fragment>
   );

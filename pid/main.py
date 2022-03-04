@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
+import string
 import time
 import os
 import board
@@ -29,6 +30,16 @@ D = 40.0
 cycleSeconds = 1
 brewPID = PID.PID(P, I, D)
 steamPID = PID.PID(P, I, D)
+
+log = []
+logCount = 0
+class logEntry:
+    time = ""
+    temp = 0
+    def __init__(self, time, temp):
+        self.time = time
+        self.temp = temp
+    
 
 # Creates a default config file if one does not exist yet
 def createConfig():
@@ -86,9 +97,22 @@ while True:
         steamTargetPwm = steamPID.output
         steamTargetPwm = max(min(int(steamTargetPwm), 100), 0)
 
+        # Creating json log of temp readings ## TODO: use an in-memory data store for this.
+        log.append(logEntry(time.strftime("%H:%M:%S"), tempC))
+        logCount += 1
+
+        if (len(log) > 100):
+            log.pop(0)
+
+        if (logCount > 5 and tempC > 40): # Only logging when machine is being used
+            with open ('/log/temperature.json', 'w') as f:
+                json.dump(log, f)
+
         # Store to redis here
 
     print("Current: {} C | Brew Target: {} C | Steam Target: {} C | Brew PWM: {} | Steam PWM: {}".format(tempC, brewTargetT, steamTargetT, brewTargetPwm, steamTargetPwm))
+
+    
 
     # The rest of the logic is to pules the element on and off according to the Pwm values. I only pulse once per cycle incase it effects the longevity of the element.
     # This is also why you should use a solid state relay as a mechanical will fail reasonably quickly doing this many cycles (along with being incredibly noisy).

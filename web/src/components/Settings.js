@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField'
 import Container from '@mui/material/Container'
-import { Typography, Box, Divider, Stack, Button } from '@mui/material';
+import { Divider, Stack, Button, Card, CardHeader } from '@mui/material';
 
 
 
@@ -16,7 +16,7 @@ const Settings = () => {
     const [settings, setSettings] = useState(0)
     const [error, setError] = useState(0)
     useEffect(() => {
-        fetch("https://1f3ec752c651391946e67ce0165e8dc0.balena-devices.com/settings").then(response => {
+        fetch("https://192.168.20.62:9000/settings").then(response => {
             response.json().then(data => {
                 setSettings(data);
             }).catch(error => {
@@ -26,8 +26,9 @@ const Settings = () => {
     }, [])
 
     const saveSettings = () => {
-        fetch("https://1f3ec752c651391946e67ce0165e8dc0.balena-devices.com/settings", {
+        fetch("https://192.168.20.62:9000/settings", {
             method: 'POST',
+            mode: 'no-cors',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -41,11 +42,10 @@ const Settings = () => {
     }
 
     return (
-        <Container>
+        <Card>
+            <CardHeader title="Silvia Settings" subheader="Modidy settings here"></CardHeader>
             <Stack spacing={2}>
-                <Typography variant="h4" color="textPrimary" align="center" gutterBottom>Silvia Settings</Typography>
                 <TableContainer component={Paper}>
-                
                 <Divider />
                     <Table sx={{ minWidth: 400 }} aria-label="settings-table">
                         <TableHead>
@@ -100,7 +100,7 @@ const Settings = () => {
                 </TableContainer>
                 <Button variant="contained" onClick={saveSettings}>Save</Button>
             </Stack>
-            </Container>
+        </Card>
     )
 }
 
