@@ -4,6 +4,7 @@ RUN pip3 install adafruit-circuitpython-lis3dh
 RUN CFLAGS="-fcommon" pip3 install rpi.gpio
 RUN pip3 install gpiozero
 RUN pip3 install adafruit-circuitpython-max31855
+RUN pip3 install jsonpickle
 
 COPY PID.py /usr/src/app/PID.py
 COPY main.py /usr/src/app/main.py

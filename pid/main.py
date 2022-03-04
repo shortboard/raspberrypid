@@ -10,6 +10,7 @@ import adafruit_max31855
 import gpiozero
 import PID
 import json
+import jsonpickle
 
 # Setup Connection
 print(dir(board))
@@ -98,7 +99,7 @@ while True:
         steamTargetPwm = max(min(int(steamTargetPwm), 100), 0)
 
         # Creating json log of temp readings ## TODO: use an in-memory data store for this.
-        log.append(logEntry(time.strftime("%H:%M:%S"), tempC))
+        log.append({'time': time.strftime("%H:%M:%S"), 'temp': tempC})
         logCount += 1
 
         if (len(log) > 100):
@@ -110,7 +111,7 @@ while True:
 
         # Store to redis here
 
-    print("Current: {} C | Brew Target: {} C | Steam Target: {} C | Brew PWM: {} | Steam PWM: {}".format(tempC, brewTargetT, steamTargetT, brewTargetPwm, steamTargetPwm))
+    print("CT: {} C | BT: {} C | ST: {} C | BPWM: {} | SPWM: {}".format(tempC, brewTargetT, steamTargetT, brewTargetPwm, steamTargetPwm))
 
     
 
