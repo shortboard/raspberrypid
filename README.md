@@ -10,6 +10,8 @@ I managed to hide all of that in the front panel.
 # Current Features
 - Brew temperature control
 - Steam temperature control
+- Configuration API
+- Web Portal
 
 ## Hardware
 - [Pi Zero 2 W](https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/)
@@ -18,12 +20,15 @@ I managed to hide all of that in the front panel.
 - [Relays](https://core-electronics.com.au/solid-state-relay-40a-3-32v-dc-input.html)
 
 ## Future features
-- Configuration API
-- Redis temperature history (Redis has a cool timeseries mode that would be good for this, not built for ARM so i'll have to build it myself)
+- Redis temperature history (Redis has a timeseries mode that would be good for this, not built for ARM so i'll have to build it myself)
 - Auto sleep (incase i leave the coffee machine on too long again)
 - Scheduler / Remote wakeup
-- Web portal configuration (though i might host that on azure in docker containers)
+- Timed shot control
+- Built in drip tray scale (for measuring shot weight)
+- Automatic weight based shot control
+- Pressure sensor
+- Pressure control
+- Pressure profiling
+- Pre-infusion
 
-## Pi in the sky features
-- Shot timer (will need to change the hardware setup so this probably wont happen)
-- Pre-infusion (wonder if i can achieve this by just opening the brew valve without the pump?)
+
