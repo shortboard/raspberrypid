@@ -17,12 +17,13 @@ function App() {
       
       <ThemeProvider theme={darkTheme}>
       <CssBaseline />
+      <Container>
 
         <Stack spacing={2}>
           <Settings />
           <TempGraph />
         </Stack>
-
+        </Container>
         
       </ThemeProvider>
     </React.Fragment>

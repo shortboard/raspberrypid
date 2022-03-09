@@ -9,8 +9,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 type Settings struct {
@@ -68,15 +68,15 @@ func getSettings(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode((settings))
 }
 
-func getTemps(w http.ResponseWriter, r *http.Request) string {
+func getTemps(w http.ResponseWriter, r *http.Request) {
 	jsonFile, err := os.ReadFile(string(filepath.Separator) + "log" + string(filepath.Separator) + "temperature.json")
 
 	if err != nil {
 		fmt.Println(err)
-		return err.Error()
+		return
 	}
 
-	return string(jsonFile)
+	w.Write(jsonFile)
 }
 
 func postSettings(w http.ResponseWriter, r *http.Request) {
@@ -93,16 +93,18 @@ func postSettings(w http.ResponseWriter, r *http.Request) {
 
 func handleRequests() {
 	router := mux.NewRouter()
-	//credentials := handlers.AllowCredentials()
-	methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
-	origins := handlers.AllowedOrigins([]string{"*"})
-	headers := handlers.AllowedHeaders([]string{"*"})
 
 	router.HandleFunc("/", homePage)
 	router.HandleFunc("/settings", getSettings).Methods("GET")
+	router.HandleFunc("/tempgraph", getTemps).Methods("GET")
 	router.HandleFunc("/settings", postSettings).Methods("POST")
 
-	log.Fatal(http.ListenAndServe(":9000", handlers.CORS(origins, headers, methods)(router)))
+	router.Use(cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedHeaders: []string{"*"},
+		Debug:          true,
+	}).Handler)
+	log.Fatal(http.ListenAndServe(":9000", router))
 }
 
 func main() {
