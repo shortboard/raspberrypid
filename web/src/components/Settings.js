@@ -7,8 +7,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField'
-import Container from '@mui/material/Container'
 import { Divider, Stack, Button, Card, CardHeader } from '@mui/material';
+const axios = require('axios');
 
 
 
@@ -16,28 +16,14 @@ const Settings = () => {
     const [settings, setSettings] = useState(0)
     const [error, setError] = useState(0)
     useEffect(() => {
-        fetch("https://192.168.20.62:9000/settings").then(response => {
-            response.json().then(data => {
-                setSettings(data);
-            }).catch(error => {
-                setError(error)
-            })
+        axios.get("http://192.168.20.62:9000/settings").then((response) => {
+            setSettings(response.data);
         })
     }, [])
 
     const saveSettings = () => {
-        fetch("https://192.168.20.62:9000/settings", {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(settings)
-        }).then(response => {
-            response.json().then(data => {
-                setSettings(data)
-            })
+        axios.post("http://192.168.20.62:9000/settings", JSON.stringify(settings)).then((response) => {
+            setSettings(response.data);
         })
     }
 
@@ -90,9 +76,9 @@ const Settings = () => {
                             </TableBody>
                             : 
                             <TableBody>
-                            <TableRow>
-                                <TableCell>Loading...</TableCell>
-                            </TableRow>
+                                <TableRow>
+                                    <TableCell>Loading...</TableCell>
+                                </TableRow>
                             </TableBody>
                         }
                         
