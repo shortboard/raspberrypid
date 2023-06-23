@@ -109,13 +109,9 @@ while True:
             with open ('/log/temperature.json', 'w') as f:
                 json.dump(log, f)
 
-        # Store to redis here
-
     print("CT: {} C | BT: {} C | ST: {} C | BPWM: {} | SPWM: {}".format(tempC, brewTargetT, steamTargetT, brewTargetPwm, steamTargetPwm))
 
-    
-
-    # The rest of the logic is to pules the element on and off according to the Pwm values. I only pulse once per cycle incase it effects the longevity of the element.
+    # The rest of the logic is to pulse the element on and off according to the Pwm values. I only pulse once per cycle incase it effects the longevity of the element.
     # This is also why you should use a solid state relay as a mechanical will fail reasonably quickly doing this many cycles (along with being incredibly noisy).
     brewOnTime = (brewTargetPwm / 100.0) * cycleSeconds
     steamOnTime = (steamTargetPwm / 100.0) * cycleSeconds
